@@ -27,13 +27,15 @@ if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    # send the published system prompt ID to the API (do not include the system content in the UI)
-    messages_for_api = st.session_state.messages
+    # send the system prompt as a system message to the API (the SDK does not accept a system_prompt parameter)
+    # Replace the placeholder string below with the actual system prompt content associated with _SYSTEM_PROMPT_ID,
+    # or load that content from a secure location before sending.
+    system_message = {"role": "system", "content": _SYSTEM_PROMPT_ID}
+    messages_for_api = [system_message] + st.session_state.messages
 
     response = client.chat.completions.create(
         model="ft:gpt-4.1-nano-2025-04-14:personal:nucleotide-primer:CVuPZNqP",
         messages=messages_for_api,
-        system_prompt={"id": _SYSTEM_PROMPT_ID},
     )
     msg = response.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": msg})
