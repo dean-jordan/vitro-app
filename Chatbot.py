@@ -1,10 +1,35 @@
 from openai import OpenAI
 import streamlit as st
 
-PUBLISHED_PROMPT_ID = "pmpt_6902e2b7e4d081938750c0f347bddb8202e5a84e628db026"
-
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+    system_prompt = st.text_area(
+        "System prompt",
+        value='''
+        You are a model that generates DNA sequence prefixes for input into downstream biological language models such as Evo 2.
+
+        Your task:
+
+        - Take as input a natural-language description of an organism, cell type, or phenotype.
+        - Output only the beginning of a DNA sequence (nucleotides using A, T, C, G).
+        - The output should resemble a realistic genetic construct or genomic segment relevant to the described organism.
+        - You must not include any explanatory text, comments, or formatting—only the DNA sequence itself, on a single line.
+
+        Output format:
+
+        ATGCGTACGTA... 
+
+        Rules:
+
+        - Do not output descriptions, notes, or metadata.
+        - Do not include non-DNA characters or whitespace.
+        - Do not wrap, punctuate, or label the sequence.
+        - The sequence length should typically range from 100–500 base pairs, unless otherwise specified.
+
+        Goal: Produce the most plausible starting DNA sequence corresponding to the biological description, optimized for interpretability and compatibility with Evo 2.
+        ''',
+        key="system_prompt"
+    )
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
 
 st.title("Vitro")
@@ -13,30 +38,11 @@ st.caption("As of now, there are a variety of machine learning methods to create
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "Describe a cell/organism."}]
 
-# render chat messages
+# render chat messages (skip system messages)
 for msg in st.session_state.messages:
+    if msg.get("role") == "system":
+        continue
     st.chat_message(msg["role"]).write(msg["content"])
-
-def _extract_prompt_run_text(resp):
-    # Try common locations for the textual output from prompts.run
-    try:
-        # object-like response
-        output = getattr(resp, "output", None) or resp.get("output") if isinstance(resp, dict) else None
-        if output and len(output) > 0:
-            first = output[0]
-            if isinstance(first, dict):
-                content = first.get("content")
-                if isinstance(content, list) and len(content) > 0:
-                    part = content[0]
-                    if isinstance(part, dict) and "text" in part:
-                        return part["text"]
-        # fallback property names
-        if hasattr(resp, "output_text"):
-            return resp.output_text
-    except Exception:
-        pass
-    # final fallback to string representation
-    return str(resp)
 
 if prompt := st.chat_input():
     if not openai_api_key:
@@ -47,19 +53,13 @@ if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    try:
-        # Run the published prompt. Provide the user's input and the conversation history as inputs.
-        response = client.prompts.run(
-            prompt=PUBLISHED_PROMPT_ID,
-            input={
-                "user_input": prompt,
-                "conversation": st.session_state.messages,
-            },
-        )
+    # send the system prompt first, then the chat messages from the session to the API
+    messages_for_api = [{"role": "system", "content": system_prompt}] + st.session_state.messages
 
-        msg = _extract_prompt_run_text(response)
-    except Exception as e:
-        msg = f"Error calling prompt: {e}"
-
+    response = client.chat.completions.create(
+        model="ft:gpt-4.1-nano-2025-04-14:personal:nucleotide-primer:CVuPZNqP",
+        messages=messages_for_api
+    )
+    msg = response.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
