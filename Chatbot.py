@@ -48,7 +48,7 @@ st.title("Vitro")
 st.caption("As of now, there are a variety of machine learning methods to create DNA. However, they all require DNA primers as input. This model allows for a DNA primer to be generated from natural language.")
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "Describe a cell/organism."}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "Describe a cell/organism for prefix development and/or assistance."}]
 
 # render chat messages (skip system messages)
 for msg in st.session_state.messages:
