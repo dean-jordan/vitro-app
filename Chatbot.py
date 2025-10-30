@@ -19,8 +19,7 @@ if prompt := st.chat_input():
         st.stop()
 
     client = OpenAI(api_key=openai_api_key)
-    st.session_state.messages.append({"role": "user", "content": prompt},
-                                     {"role": "system", "content": {"prompt_id": "pmpt_690202529f6081938bb6e11ba2d4d7890d5fa374437759f3"}})
+    st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     response = client.chat.completions.create(model="ft:gpt-4.1-nano-2025-04-14:personal:nucleotide-primer:CVuPZNqP", messages=st.session_state.messages)
     msg = response.choices[0].message.content
