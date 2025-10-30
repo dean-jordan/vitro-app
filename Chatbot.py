@@ -1,9 +1,6 @@
 from openai import OpenAI
 import streamlit as st
 
-# Replace this with your OpenAI-published system prompt ID
-_SYSTEM_PROMPT_ID = "pmpt_690202529f6081938bb6e11ba2d4d7890d5fa374437759f3"
-
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
@@ -14,7 +11,7 @@ st.caption("As of now, there are a variety of machine learning methods to create
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "Describe a cell/organism."}]
 
-# render chat messages (do not render the system prompt)
+# render chat messages
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
@@ -27,15 +24,10 @@ if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    # send the system prompt as a system message to the API (the SDK does not accept a system_prompt parameter)
-    # Replace the placeholder string below with the actual system prompt content associated with _SYSTEM_PROMPT_ID,
-    # or load that content from a secure location before sending.
-    system_message = {"role": "system", "content": _SYSTEM_PROMPT_ID}
-    messages_for_api = [system_message] + st.session_state.messages
-
+    # send only the chat messages from the session to the API
     response = client.chat.completions.create(
         model="ft:gpt-4.1-nano-2025-04-14:personal:nucleotide-primer:CVuPZNqP",
-        messages=messages_for_api,
+        messages=st.session_state.messages
     )
     msg = response.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": msg})
