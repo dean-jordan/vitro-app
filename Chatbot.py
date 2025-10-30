@@ -19,6 +19,7 @@ Strict output rules:
 - The typical sequence length is 100–500 base pairs, unless specified otherwise.
 - If any invalid characters or words appear, automatically self-correct and output only valid bases.
 - Never include commentary, metadata, or biological interpretation.
+- Your response must be, at most, 300 characters.
 
 Validation constraint:
 Your output must match the regex pattern:
@@ -31,6 +32,7 @@ Behavior summary:
 - You are already fine-tuned.
 - You must use your internal fine-tuned biological understanding to generate plausible DNA sequences.
 - You must never include anything other than the raw sequence.
+- Output 300 characrers or fewer. All must be "A", "C", "T", or "G".
 '''
 
 with st.sidebar:
