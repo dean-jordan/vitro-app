@@ -5,7 +5,6 @@ st.title("The Vitro Community")
 st.caption("See the genomes others have created and contribute to the open research community.")
 
 with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Visualize with AlphaFold 3](https://alphafoldserver.com)"
     "[Develop DNA with Evo 2](https://arcinstitute.org/tools/evo/evo-designer)"
 

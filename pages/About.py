@@ -2,7 +2,6 @@ from openai import OpenAI
 import streamlit as st
 
 with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Visualize with AlphaFold 3](https://alphafoldserver.com)"
     "[Develop DNA with Evo 2](https://arcinstitute.org/tools/evo/evo-designer)"
 
