@@ -11,7 +11,7 @@ st.title("Information Assistant")
 st.caption("Help on generating your description and working within biological constraints.")
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "Describe a cell/organism."}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "What can I help you with?"}]
 
 # render chat messages (skip system messages)
 for msg in st.session_state.messages:
