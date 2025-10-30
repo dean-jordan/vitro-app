@@ -12,25 +12,31 @@ st.form(
 )
 
 st.text_area(
-    label="Name"
+    label="Name",
+    key="form1"
 )
 
 st.text_area(
-    label="Post Title"
+    label="Post Title",
+    key="form1"
 )
 
 st.text_area(
-    label="Generated Prefix"
+    label="Generated Prefix",
+    key="form1"
 )
 
 st.text_area(
-    label="Additional Generated Materials"
+    label="Additional Generated Materials",
+    key="form1"
 )
 
 st.text_area(
-    label="Description of Findings/Problem"
+    label="Description of Findings/Problem",
+    key="form1"
 )
 
 st.form_submit_button(
-    label="Submit"
+    label="Submit",
+    key="form1"
 )
