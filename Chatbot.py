@@ -1,35 +1,33 @@
 from openai import OpenAI
 import streamlit as st
 
+# Hard-coded system prompt
+system_prompt = '''
+You are a model that generates DNA sequence prefixes for input into downstream biological language models such as Evo 2.
+
+Your task:
+
+- Take as input a natural-language description of an organism, cell type, or phenotype.
+- Output only the beginning of a DNA sequence (nucleotides using A, T, C, G).
+- The output should resemble a realistic genetic construct or genomic segment relevant to the described organism.
+- You must not include any explanatory text, comments, or formatting—only the DNA sequence itself, on a single line.
+
+Output format:
+
+ATGCGTACGTA... 
+
+Rules:
+
+- Do not output descriptions, notes, or metadata.
+- Do not include non-DNA characters or whitespace.
+- Do not wrap, punctuate, or label the sequence.
+- The sequence length should typically range from 100–500 base pairs, unless otherwise specified.
+
+Goal: Produce the most plausible starting DNA sequence corresponding to the biological description, optimized for interpretability and compatibility with Evo 2.
+'''
+
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    system_prompt = st.text_area(
-        "System prompt",
-        value='''
-        You are a model that generates DNA sequence prefixes for input into downstream biological language models such as Evo 2.
-
-        Your task:
-
-        - Take as input a natural-language description of an organism, cell type, or phenotype.
-        - Output only the beginning of a DNA sequence (nucleotides using A, T, C, G).
-        - The output should resemble a realistic genetic construct or genomic segment relevant to the described organism.
-        - You must not include any explanatory text, comments, or formatting—only the DNA sequence itself, on a single line.
-
-        Output format:
-
-        ATGCGTACGTA... 
-
-        Rules:
-
-        - Do not output descriptions, notes, or metadata.
-        - Do not include non-DNA characters or whitespace.
-        - Do not wrap, punctuate, or label the sequence.
-        - The sequence length should typically range from 100–500 base pairs, unless otherwise specified.
-
-        Goal: Produce the most plausible starting DNA sequence corresponding to the biological description, optimized for interpretability and compatibility with Evo 2.
-        ''',
-        key="system_prompt"
-    )
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
 
 st.title("Vitro")
