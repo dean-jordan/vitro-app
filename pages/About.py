@@ -4,10 +4,6 @@ import streamlit as st
 st.title("Information")
 st.caption("About the App")
 
-with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
-
 st.header("Synthetic DNA Engineering with Vitro")
 
 st.text("")
