@@ -4,6 +4,12 @@ from datetime import datetime
 st.title("The Vitro Community")
 st.caption("See the genomes others have created and contribute to the open research community.")
 
+with st.sidebar:
+    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
+    "[Visualize with AlphaFold 3](https://alphafoldserver.com)"
+    "[Develop DNA with Evo 2](https://arcinstitute.org/tools/evo/evo-designer)"
+
 # Initialize posts store in session state
 if "posts" not in st.session_state:
     st.session_state["posts"] = []
