@@ -5,8 +5,8 @@ with st.sidebar:
     "[Visualize with AlphaFold 3](https://alphafoldserver.com)"
     "[Develop DNA with Evo 2](https://arcinstitute.org/tools/evo/evo-designer)"
 
-st.title("Information")
-st.caption("About the App")
+st.title("Additional Information")
+st.caption("About the App and Additional Integration")
 
 st.header("Synthetic DNA Engineering with Vitro")
 
