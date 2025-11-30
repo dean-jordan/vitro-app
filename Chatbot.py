@@ -69,7 +69,7 @@ if prompt := st.chat_input():
     messages_for_api = [{"role": "system", "content": system_prompt}] + st.session_state.messages
 
     response = client.chat.completions.create(
-        model="ft:gpt-4.1-nano-2025-04-14:personal:nucleotide-primer:CVuPZNqP",
+        model="ft:gpt-4.1-nano-2025-04-14:personal:vitro:ChOWHErT",
         messages=messages_for_api
     )
     msg = response.choices[0].message.content
